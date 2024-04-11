@@ -26,19 +26,31 @@ export const getTasks = async () => {
   return response.json();
 };
 
-export const updateTask = async (taskId, taskData) => {
-  const response = await fetch(`${API_URL}/tasks/${taskId}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(taskData),
-  });
-  return response.json();
-};
+
 
 export const deleteTask = async (taskId) => {
-  await fetch(`${API_URL}/tasks/${taskId}`, {
-    method: "DELETE",
-  });
+  try {
+    await fetch(`${API_URL}/tasks/${taskId}`, {
+      method: "DELETE",
+    });
+  } catch (error) {
+    console.error("Failed to delete todo", error);
+    throw error;
+  }
+};
+
+export const updateTask = async (taskId, taskData) => {
+  try {
+    const response = await fetch(`${API_URL}/tasks/${taskId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ data: taskData }),
+    });
+    return response.json();
+  } catch (error) {
+    console.error("Failed to update todo", error);
+    throw error;
+  }
 };
