@@ -4,9 +4,9 @@ import Index from "./pages/Index.jsx";
 import About from "./pages/About.jsx";
 import Contact from "./pages/Contact.jsx";
 import Widgets from "./pages/Widgets.jsx";
+import Gallery from "./pages/Gallery.jsx";
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
-import ImageGallery from "./components/ImageGallery.jsx";
 
 function App() {
   return (
@@ -17,8 +17,8 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/widgets" element={<Widgets />} />
+        <Route path="/gallery" element={<Gallery />} />
       </Routes>
-      <ImageGallery />
       <Footer />
     </Router>
   );

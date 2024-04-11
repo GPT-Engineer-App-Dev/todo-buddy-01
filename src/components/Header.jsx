@@ -18,7 +18,10 @@ const Header = () => {
           <Link to="/contact" mr={4}>
             Contact
           </Link>
-          <Link to="/widgets">Widgets</Link>
+          <Link to="/widgets" mr={4}>
+            Widgets
+          </Link>
+          <Link to="/gallery">Gallery</Link>
         </Box>
       </Flex>
     </Box>
