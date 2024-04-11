@@ -5,6 +5,7 @@ import About from "./pages/About.jsx";
 import Contact from "./pages/Contact.jsx";
 import Widgets from "./pages/Widgets.jsx";
 import Gallery from "./pages/Gallery.jsx";
+import Pricing from "./pages/Pricing.jsx";
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 
@@ -18,6 +19,7 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/widgets" element={<Widgets />} />
         <Route path="/gallery" element={<Gallery />} />
+        <Route path="/pricing" element={<Pricing />} />
       </Routes>
       <Footer />
     </Router>
