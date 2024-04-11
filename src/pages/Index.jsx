@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import { Box, Heading, Input, Button, List, ListItem, ListIcon, Text, Flex } from "@chakra-ui/react";
 import { FaPlus, FaCheck } from "react-icons/fa";
+import TodoModal from "../components/TodoModal";
 
 const Index = () => {
   const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState("");
   const [deadlines, setDeadlines] = useState([]);
+  const [selectedTodo, setSelectedTodo] = useState(null);
 
   const handleAddTodo = () => {
     if (newTodo.trim() !== "") {
-      setTodos([...todos, { text: newTodo, completed: false, deadline: "" }]);
+      setTodos([...todos, { text: newTodo, completed: false, deadline: "", description: "" }]);
       setNewTodo("");
     }
   };
@@ -26,6 +28,16 @@ const Index = () => {
     setDeadlines(updatedDeadlines);
   };
 
+  const handleTodoClick = (todo) => {
+    setSelectedTodo(todo);
+  };
+
+  const handleSaveTodo = (updatedTodo) => {
+    const updatedTodos = todos.map((todo) => (todo === selectedTodo ? updatedTodo : todo));
+    setTodos(updatedTodos);
+    setSelectedTodo(null);
+  };
+
   return (
     <Box maxWidth="500px" margin="auto" mt={8}>
       <Heading mb={4}>Todo App</Heading>
@@ -37,7 +49,7 @@ const Index = () => {
       </Box>
       <List spacing={3}>
         {todos.map((todo, index) => (
-          <ListItem key={index} display="flex" alignItems="center" justifyContent="space-between" p={2} borderWidth={1} borderRadius="md">
+          <ListItem key={index} display="flex" alignItems="center" justifyContent="space-between" p={2} borderWidth={1} borderRadius="md" cursor="pointer" onClick={() => handleTodoClick(todo)}>
             <Flex alignItems="center">
               <Text as={todo.completed ? "del" : "span"} mr={2}>
                 {todo.text}
@@ -57,6 +69,7 @@ const Index = () => {
           </ListItem>
         ))}
       </List>
+      <TodoModal isOpen={selectedTodo !== null} onClose={() => setSelectedTodo(null)} todo={selectedTodo || {}} onSave={handleSaveTodo} />
     </Box>
   );
 };
