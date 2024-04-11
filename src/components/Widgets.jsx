@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Heading, Button, Switch, Alert, AlertIcon } from "@chakra-ui/react";
+import { Box, Heading, Button, Switch, Alert, AlertIcon, useTimeout } from "@chakra-ui/react";
 
 const Widgets = () => {
   const [widgets] = useState([
@@ -11,9 +11,16 @@ const Widgets = () => {
   ]);
 
   const [alerts, setAlerts] = useState([]);
+  const [alertTimeout] = useState(3000);
+
+  const removeAlert = (alertId) => {
+    setAlerts((prevAlerts) => prevAlerts.filter((alert) => alert.id !== alertId));
+  };
 
   const handleButtonClick = (alertMessage) => {
-    setAlerts([...alerts, { message: alertMessage }]);
+    const newAlert = { id: Date.now(), message: alertMessage };
+    setAlerts([...alerts, newAlert]);
+    useTimeout(() => removeAlert(newAlert.id), alertTimeout);
   };
 
   return (
@@ -32,11 +39,13 @@ const Widgets = () => {
           </Button>
         </Box>
       ))}
-      {alerts.map((alert, index) => (
-        <Alert key={index} status="info" mb={2}>
-          <AlertIcon />
-          {alert.message}
-        </Alert>
+      {alerts.map((alert) => (
+        <Box key={alert.id} position="fixed" bottom={0} right={0} m={4} zIndex={9999}>
+          <Alert status="info" transition="all 0.3s ease-in-out">
+            <AlertIcon />
+            {alert.message}
+          </Alert>
+        </Box>
       ))}
     </Box>
   );
