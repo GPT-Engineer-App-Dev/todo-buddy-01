@@ -5,14 +5,14 @@ import { FaPlus, FaCheck } from "react-icons/fa";
 import TodoModal from "../components/TodoModal";
 
 const Index = () => {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState({ data: [] });
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchTodos = async () => {
       try {
-        const data = await getTasks();
-        setTodos(data);
+        const response = await getTasks();
+        setTodos(response.data);
       } catch (error) {
         setError("Failed to fetch todos");
       }
@@ -81,29 +81,30 @@ const Index = () => {
         </Button>
       </Box>
       <List spacing={3}>
-        {todos.map((todo, index) => (
-          <ListItem key={index} display="flex" alignItems="center" justifyContent="space-between" p={2} borderWidth={1} borderRadius="md">
-            <Flex alignItems="center">
-              <Text as={todo.completed ? "del" : "span"} mr={2} cursor="pointer" onClick={() => handleTodoClick(todo)}>
-                {todo.text}
-              </Text>
-              {deadlines[index] && (
-                <Text fontSize="sm" color="gray.500">
-                  Due: {deadlines[index]}
+        {Array.isArray(todos.data) &&
+          todos.data.map((todo, index) => (
+            <ListItem key={index} display="flex" alignItems="center" justifyContent="space-between" p={2} borderWidth={1} borderRadius="md">
+              <Flex alignItems="center">
+                <Text as={todo.completed ? "del" : "span"} mr={2} cursor="pointer" onClick={() => handleTodoClick(todo)}>
+                  {todo.text}
                 </Text>
-              )}
-            </Flex>
-            <Flex alignItems="center">
-              <Input type="date" size="sm" value={deadlines[index] || ""} onChange={(e) => handleDeadlineChange(index, e.target.value)} mr={2} />
-              <Button size="sm" onClick={() => handleToggleTodo(todo)} colorScheme={todo.completed ? "green" : "gray"} mr={2}>
-                <ListIcon as={FaCheck} />
-              </Button>
-              <Button size="sm" onClick={() => handleDeleteTodo(todo.id)} colorScheme="red">
-                Delete
-              </Button>
-            </Flex>
-          </ListItem>
-        ))}
+                {deadlines[index] && (
+                  <Text fontSize="sm" color="gray.500">
+                    Due: {deadlines[index]}
+                  </Text>
+                )}
+              </Flex>
+              <Flex alignItems="center">
+                <Input type="date" size="sm" value={deadlines[index] || ""} onChange={(e) => handleDeadlineChange(index, e.target.value)} mr={2} />
+                <Button size="sm" onClick={() => handleToggleTodo(todo)} colorScheme={todo.completed ? "green" : "gray"} mr={2}>
+                  <ListIcon as={FaCheck} />
+                </Button>
+                <Button size="sm" onClick={() => handleDeleteTodo(todo.id)} colorScheme="red">
+                  Delete
+                </Button>
+              </Flex>
+            </ListItem>
+          ))}
       </List>
       {error && (
         <Text color="red.500" mt={4}>
