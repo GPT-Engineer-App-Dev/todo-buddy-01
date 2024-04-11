@@ -1,25 +1,58 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { createTask, getTasks, updateTask, deleteTask } from "../utils/api";
 import { Box, Heading, Input, Button, List, ListItem, ListIcon, Text, Flex } from "@chakra-ui/react";
 import { FaPlus, FaCheck } from "react-icons/fa";
 import TodoModal from "../components/TodoModal";
 
 const Index = () => {
   const [todos, setTodos] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchTodos = async () => {
+      try {
+        const data = await getTasks();
+        setTodos(data);
+      } catch (error) {
+        setError("Failed to fetch todos");
+      }
+    };
+
+    fetchTodos();
+  }, []);
   const [newTodo, setNewTodo] = useState("");
   const [deadlines, setDeadlines] = useState([]);
   const [selectedTodo, setSelectedTodo] = useState(null);
 
-  const handleAddTodo = () => {
+  const handleAddTodo = async () => {
     if (newTodo.trim() !== "") {
-      setTodos([...todos, { text: newTodo, completed: false, deadline: "", description: "" }]);
+      try {
+        const newTask = await createTask({ name: newTodo, deadline: "" });
+        setTodos([...todos, newTask]);
+        setNewTodo("");
+      } catch (error) {
+        setError("Failed to add todo");
+      }
       setNewTodo("");
     }
   };
 
-  const handleToggleTodo = (index) => {
-    const updatedTodos = [...todos];
-    updatedTodos[index].completed = !updatedTodos[index].completed;
-    setTodos(updatedTodos);
+  const handleToggleTodo = async (todo) => {
+    try {
+      const updatedTask = await updateTask(todo.id, { ...todo, completed: !todo.completed });
+      setTodos(todos.map((t) => (t.id === todo.id ? updatedTask : t)));
+    } catch (error) {
+      setError("Failed to update todo");
+    }
+  };
+
+  const handleDeleteTodo = async (todoId) => {
+    try {
+      await deleteTask(todoId);
+      setTodos(todos.filter((todo) => todo.id !== todoId));
+    } catch (error) {
+      setError("Failed to delete todo");
+    }
   };
 
   const handleDeadlineChange = (index, date) => {
@@ -62,13 +95,21 @@ const Index = () => {
             </Flex>
             <Flex alignItems="center">
               <Input type="date" size="sm" value={deadlines[index] || ""} onChange={(e) => handleDeadlineChange(index, e.target.value)} mr={2} />
-              <Button size="sm" onClick={() => handleToggleTodo(index)} colorScheme={todo.completed ? "green" : "gray"}>
+              <Button size="sm" onClick={() => handleToggleTodo(todo)} colorScheme={todo.completed ? "green" : "gray"} mr={2}>
                 <ListIcon as={FaCheck} />
+              </Button>
+              <Button size="sm" onClick={() => handleDeleteTodo(todo.id)} colorScheme="red">
+                Delete
               </Button>
             </Flex>
           </ListItem>
         ))}
       </List>
+      {error && (
+        <Text color="red.500" mt={4}>
+          {error}
+        </Text>
+      )}
       <TodoModal isOpen={selectedTodo !== null} onClose={() => setSelectedTodo(null)} todo={selectedTodo || {}} onSave={handleSaveTodo} />
     </Box>
   );
