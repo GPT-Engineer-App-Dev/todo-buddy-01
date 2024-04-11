@@ -15,7 +15,10 @@ const Header = () => {
           <Link to="/about" mr={4}>
             About
           </Link>
-          <Link to="/contact">Contact</Link>
+          <Link to="/contact" mr={4}>
+            Contact
+          </Link>
+          <Link to="/widgets">Widgets</Link>
         </Box>
       </Flex>
     </Box>
