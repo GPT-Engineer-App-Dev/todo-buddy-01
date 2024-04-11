@@ -49,9 +49,9 @@ const Index = () => {
       </Box>
       <List spacing={3}>
         {todos.map((todo, index) => (
-          <ListItem key={index} display="flex" alignItems="center" justifyContent="space-between" p={2} borderWidth={1} borderRadius="md" cursor="pointer" onClick={() => handleTodoClick(todo)}>
+          <ListItem key={index} display="flex" alignItems="center" justifyContent="space-between" p={2} borderWidth={1} borderRadius="md">
             <Flex alignItems="center">
-              <Text as={todo.completed ? "del" : "span"} mr={2}>
+              <Text as={todo.completed ? "del" : "span"} mr={2} cursor="pointer" onClick={() => handleTodoClick(todo)}>
                 {todo.text}
               </Text>
               {deadlines[index] && (
