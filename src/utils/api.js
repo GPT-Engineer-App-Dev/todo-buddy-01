@@ -1,12 +1,22 @@
 const API_URL = "http://localhost:1337/api";
 
 export const createTask = async (taskData) => {
+  const payload = {
+    data: {
+      name: taskData.name,
+    },
+  };
+
+  if (taskData.deadline) {
+    payload.data.deadline = taskData.deadline;
+  }
+
   const response = await fetch(`${API_URL}/tasks`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(taskData),
+    body: JSON.stringify(payload),
   });
   return response.json();
 };
