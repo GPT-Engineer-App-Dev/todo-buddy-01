@@ -15,7 +15,7 @@ const TodoModal = ({ isOpen, onClose, todo, onSave }) => {
       <ModalContent>
         <ModalHeader>{todo.text}</ModalHeader>
         <ModalBody>
-          <Text mb={2}>Due: {todo.deadline || "N/A"}</Text>
+          {todo.deadline && <Text mb={2}>Due: {todo.deadline}</Text>}
           <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Enter a description" />
         </ModalBody>
         <ModalFooter>
