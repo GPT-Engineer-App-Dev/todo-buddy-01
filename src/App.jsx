@@ -4,6 +4,7 @@ import Index from "./pages/Index.jsx";
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 import Widgets from "./components/Widgets.jsx";
+import ImageGallery from "./components/ImageGallery.jsx";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Routes>
         <Route exact path="/" element={<Index />} />
       </Routes>
+      <ImageGallery />
       <Widgets />
       <Footer />
     </Router>
