@@ -42,7 +42,7 @@ const Index = () => {
     <Box maxWidth="500px" margin="auto" mt={8}>
       <Heading mb={4}>Todo App</Heading>
       <Box display="flex" mb={4}>
-        <Input value={newTodo} onChange={(e) => setNewTodo(e.target.value)} placeholder="Enter a new todo" mr={2} />
+        <Input value={newTodo} onChange={(e) => setNewTodo(e.target.value)} onKeyPress={(e) => e.key === "Enter" && handleAddTodo()} placeholder="Enter a new todo" mr={2} />
         <Button onClick={handleAddTodo} colorScheme="blue">
           <FaPlus />
         </Button>
